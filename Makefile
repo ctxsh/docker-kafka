@@ -19,8 +19,8 @@ kafka:
 ###################################################################################################
 # Local testing targets
 ###################################################################################################
-.PHONY: local
-local: zookeeper local-kind local-release local-deploy
+.PHONY: test
+test: kafka local-kind local-release
 
 .PHONY: local-kind
 local-kind:
@@ -29,12 +29,10 @@ local-kind:
 
 .PHONY: local-release
 local-release:
-	@docker tag $(DOCKERHUB_USER)/kafka:$(VERSION) localhost:5000/kafka:$(VERSION)
-	@docker push localhost:5000/kafka:$(VERSION)
+	@docker tag $(DOCKERHUB_USER)/kafka:$(VERSION) localhost:5000/kafka-local:latest
+	@docker push localhost:5000/kafka-local:latest
 
-.PHONY: local-deploy
-local-deploy:
-	@kubectl apply -k $(MAKE_PATH)test/manifests
+# TODO: Run the tests
 
 ###################################################################################################
 # Utility targets
