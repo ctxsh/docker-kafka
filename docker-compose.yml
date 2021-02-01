@@ -1,0 +1,28 @@
+version: "3"
+services:
+  zookeeper:
+    hostname: zk-0.docker.local
+    image: ctxsh/zookeeper:3.6.1
+    networks:
+      skynet:
+        aliases:
+          - zk-0
+          - zk-0.docker.local
+  kafka:
+    build: .
+    hostname: kafka-0.docker.local
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zk-0.docker.local:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+    ports:
+      - "9092:9092"
+    volumes:
+      - .:/code
+    networks:
+      skynet:
+        aliases:
+          - kafka-0
+          - kafka-0.docker.local
+
+networks:
+  skynet:
